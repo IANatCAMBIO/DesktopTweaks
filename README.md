@@ -48,9 +48,8 @@ needed.
 
 Other top-level targets: `make install-whitelist` (see below), `make test`
 (runs `liquid_glass_off`'s probe-based test, the only subdirectory with one),
-`make clean`, and `make uninstall`
-(removes `firefox_titlebar` and `liquid_glass_off`; `classic_titlebar` has no
-uninstall target yet, and the target says what to remove by hand).
+`make clean`, and `make uninstall` (removes all three
+from the tweak directory).
 
 Each tweak can also be built and installed on its own:
 

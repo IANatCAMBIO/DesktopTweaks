@@ -45,5 +45,5 @@ askpass helper.
   place. Overwriting a dylib that a running app has mapped invalidates the
   signature the kernel already validated for that file, and the next launch
   of that app fails until reboot.
-* Rosetta apps are not covered; add `-arch x86_64` to `ARCHS` in the Makefile
-  if you need them.
+* Rosetta apps are not covered; build with
+  `make ARCHS="-arch arm64 -arch arm64e -arch x86_64"` if you need them.

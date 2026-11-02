@@ -6,10 +6,9 @@
 
 TWEAKS    = classic_titlebar firefox_titlebar liquid_glass_off
 
-# Not every subdirectory provides every target; these lists keep the
-# delegation honest rather than inventing targets that do not exist.
+# liquid_glass_off is the only subdirectory with a test target; the rest of
+# the interface is the same in all three.
 TESTABLE  = liquid_glass_off
-UNINSTALL = firefox_titlebar liquid_glass_off
 
 .PHONY: all install install-whitelist uninstall test clean $(TWEAKS)
 
@@ -33,9 +32,7 @@ install-whitelist:
 	@for d in $(TWEAKS); do $(MAKE) -C $$d install-whitelist || exit 1; done
 
 uninstall:
-	@for d in $(UNINSTALL); do $(MAKE) -C $$d uninstall || exit 1; done
-	@echo "classic_titlebar has no uninstall target; remove its files by hand:"
-	@echo "  sudo rm -f /private/var/ammonia/core/tweaks/ClassicTitlebar.dylib*"
+	@for d in $(TWEAKS); do $(MAKE) -C $$d uninstall || exit 1; done
 
 test:
 	@for d in $(TESTABLE); do $(MAKE) -C $$d test || exit 1; done

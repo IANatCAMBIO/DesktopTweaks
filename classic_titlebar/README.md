@@ -46,6 +46,14 @@ sudo install -o root -g wheel -m 644 ClassicTitlebar.dylib.whitelist /private/va
 
 Then relaunch the whitelisted apps.
 
+## Uninstall
+
+```sh
+make uninstall
+```
+
+then relaunch the affected apps. Build details are in [BUILD.md](BUILD.md).
+
 ## How it works
 
 Each target window gets one of two treatments depending on its NSWindow subclass; classification happens at runtime, so adding a new app to the whitelist requires no code changes.

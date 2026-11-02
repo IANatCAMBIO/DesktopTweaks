@@ -1,12 +1,12 @@
 SDK ?= macosx
-ARCHS ?= arm64 x86_64
+ARCHS ?= -arch arm64 -arch arm64e -arch x86_64
 OUT ?= ClassicTitlebar.dylib
 SRC ?= ClassicTitlebar.m
 WHITELIST ?= $(OUT).whitelist
 TWEAK_DIR ?= /private/var/ammonia/core/tweaks
 SUDO ?= sudo
 
-.PHONY: all install install-whitelist clean
+.PHONY: all install install-whitelist uninstall clean
 
 all: $(OUT)
 
@@ -14,7 +14,7 @@ $(OUT): $(SRC)
 	clang -dynamiclib -fobjc-arc \
 		-isysroot "$$(xcrun --sdk $(SDK) --show-sdk-path)" \
 		-framework Cocoa -framework QuartzCore \
-		-arch arm64 -arch arm64e -arch x86_64 \
+		$(ARCHS) \
 		-Wall -Wextra -Wno-unused-parameter \
 		-o $(OUT) $(SRC)
 
@@ -50,6 +50,10 @@ install-whitelist:
 	$(SUDO) install -o root -g wheel -m 644 $(WHITELIST) "$(TWEAK_DIR)/$(WHITELIST).new"
 	$(SUDO) mv -f "$(TWEAK_DIR)/$(WHITELIST).new" "$(TWEAK_DIR)/$(WHITELIST)"
 	@echo "whitelist replaced; relaunch the affected apps"
+
+uninstall:
+	$(SUDO) rm -f "$(TWEAK_DIR)/$(OUT)" "$(TWEAK_DIR)/$(WHITELIST)"
+	@echo "removed; relaunch the affected apps to drop it"
 
 clean:
 	rm -f $(OUT)

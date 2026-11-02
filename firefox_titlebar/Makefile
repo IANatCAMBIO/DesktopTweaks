@@ -7,7 +7,7 @@ TWEAK_DIR ?= /private/var/ammonia/core/tweaks
 SUDO      ?= sudo
 CC         = clang
 CFLAGS     = -Wall -Wextra -O2
-ARCHS      = -arch arm64 -arch arm64e
+ARCHS     ?= -arch arm64 -arch arm64e
 
 .PHONY: all run install install-whitelist uninstall clean
 
