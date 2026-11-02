@@ -38,11 +38,14 @@ change per process avoids both problems.
 ```sh
 make            # builds liquid_glass_off.dylib and the solarium_probe test tool
 make test       # proves the hook flips Liquid Glass off in a fresh process
-sudo make install
+make install    # invokes sudo itself
 ```
 
-`make install` copies the dylib and its whitelist into
-`/private/var/ammonia/core/tweaks`. Relaunch the whitelisted apps
+`make install` copies the dylib into
+`/private/var/ammonia/core/tweaks`. It installs the default whitelist only if
+no whitelist is already there, so edits made directly in the tweak directory
+survive a reinstall; use `make install-whitelist` to deliberately replace the
+installed whitelist with this repo's copy. Relaunch the whitelisted apps
 (for Finder: `killall Finder`) and they come up without Liquid Glass.
 No reboot is needed.
 
@@ -63,7 +66,7 @@ Notes
 Terminal
 ```
 
-Edit it, run `sudo make install` again and relaunch the app. Keep system UI
+Edit it, run `make install-whitelist` and relaunch the app. Keep system UI
 processes such as `NotificationCenter`, `ControlCenter`, `Dock`,
 `IOUIAgent` and `loginwindow` out of the list; they have no non-glass fallback
 and will render without backgrounds.
@@ -99,7 +102,7 @@ log show --last 5m --predicate 'eventMessage CONTAINS "liquid_glass_off"'
 ## Uninstall
 
 ```sh
-sudo make uninstall
+make uninstall
 ```
 
 then relaunch the affected apps.

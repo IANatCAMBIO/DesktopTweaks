@@ -46,8 +46,9 @@ Then relaunch the affected apps — injection happens at process launch, so
 anything already running keeps whatever it was launched with. No reboot is
 needed.
 
-Other top-level targets: `make test` (runs `liquid_glass_off`'s probe-based
-test, the only subdirectory with one), `make clean`, and `make uninstall`
+Other top-level targets: `make install-whitelist` (see below), `make test`
+(runs `liquid_glass_off`'s probe-based test, the only subdirectory with one),
+`make clean`, and `make uninstall`
 (removes `firefox_titlebar` and `liquid_glass_off`; `classic_titlebar` has no
 uninstall target yet, and the target says what to remove by hand).
 
@@ -82,10 +83,15 @@ Keep system UI processes — `NotificationCenter`, `ControlCenter`, `Dock`,
 `IOUIAgent`, `loginwindow` — off the `liquid_glass_off` whitelist. They have
 no non-glass fallback and will render without backgrounds.
 
-To change the targets, edit the **installed** whitelist in
-`/private/var/ammonia/core/tweaks/` (or edit the copy here and reinstall) and
-relaunch the app. Note that `classic_titlebar`'s `make install` deliberately
-will not overwrite an existing installed whitelist.
+To change the targets, either edit the **installed** whitelist in
+`/private/var/ammonia/core/tweaks/` and relaunch the app, or edit the copy in
+this repo and run `make install-whitelist`.
+
+`make install` deliberately never overwrites a whitelist that is already
+installed — it only puts the default in place when none exists — so edits made
+directly in the tweak directory survive a reinstall of the dylib.
+`make install-whitelist` is the explicit override, and replaces the installed
+whitelists with this repo's copies.
 
 Keep whitelist files to one bare executable name per line: Ammonia's per-tweak
 whitelist parser does not strip leading or trailing spaces and does not treat

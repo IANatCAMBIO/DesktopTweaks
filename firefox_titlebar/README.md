@@ -41,13 +41,18 @@ exactly as they do in a centered native app.
 
 ```sh
 make
-sudo make install
+make install      # invokes sudo itself
 make run          # relaunches Firefox
 ```
 
-`make install` copies the dylib and its whitelist into
-`/private/var/ammonia/core/tweaks`. If Ammonia runs with an
-`ammonia.allowlist`, `firefox` must be listed there as well.
+`make install` copies the dylib into
+`/private/var/ammonia/core/tweaks`. It installs the default whitelist only if
+no whitelist is already there, so edits made directly in the tweak directory
+survive a reinstall; use `make install-whitelist` to deliberately replace the
+installed whitelist with this repo's copy.
+
+If Ammonia runs with an `ammonia.allowlist`, `firefox` must be listed there as
+well.
 
 ## Choosing the processes
 
@@ -73,6 +78,6 @@ log show --last 5m --predicate 'eventMessage CONTAINS "firefox_titlebar"'
 ## Uninstall
 
 ```sh
-sudo make uninstall
+make uninstall
 make run
 ```

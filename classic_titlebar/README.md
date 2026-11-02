@@ -34,7 +34,7 @@ This produces `ClassicTitlebar.dylib`. The linker auto-applies an `adhoc,linker-
 make install
 ```
 
-`make install` won't overwrite an existing whitelist; the default whitelist is only installed if no whitelist file is present. To push a changed whitelist, copy it by hand (see below).
+`make install` won't overwrite an existing whitelist; the default whitelist is only installed if no whitelist file is present, so edits made directly in the tweak directory survive a reinstall. To push a changed whitelist from here, run `make install-whitelist`.
 
 Or manually:
 

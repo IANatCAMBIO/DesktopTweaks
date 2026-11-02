@@ -10,7 +10,7 @@ CC         = clang
 CFLAGS     = -Wall -Wextra -O2
 ARCHS      = -arch arm64 -arch arm64e
 
-.PHONY: all run install uninstall test clean
+.PHONY: all run install install-whitelist uninstall test clean
 
 all: $(DYLIB) $(PROBE)
 
@@ -38,8 +38,22 @@ test: all
 install: $(DYLIB)
 	$(SUDO) install -o root -g wheel -m 755 $(DYLIB) $(TWEAK_DIR)/$(DYLIB).new
 	$(SUDO) mv -f $(TWEAK_DIR)/$(DYLIB).new $(TWEAK_DIR)/$(DYLIB)
-	$(SUDO) install -o root -g wheel -m 644 $(WHITELIST) $(TWEAK_DIR)/$(WHITELIST)
+	@if [ -f "$(TWEAK_DIR)/$(WHITELIST)" ]; then \
+		echo "Keeping existing $(TWEAK_DIR)/$(WHITELIST)"; \
+	else \
+		$(SUDO) install -o root -g wheel -m 644 $(WHITELIST) $(TWEAK_DIR)/$(WHITELIST); \
+		echo "Installed default $(TWEAK_DIR)/$(WHITELIST)"; \
+	fi
 	@echo "installed; relaunch the whitelisted apps to pick it up"
+
+# `install` never overwrites a whitelist that is already in place, so that
+# whitelist edits made directly in the tweak directory survive a reinstall.
+# This target is the deliberate override: it replaces the installed whitelist
+# with this repo's copy.
+install-whitelist:
+	$(SUDO) install -o root -g wheel -m 644 $(WHITELIST) $(TWEAK_DIR)/$(WHITELIST).new
+	$(SUDO) mv -f $(TWEAK_DIR)/$(WHITELIST).new $(TWEAK_DIR)/$(WHITELIST)
+	@echo "whitelist replaced; relaunch the affected apps"
 
 uninstall:
 	$(SUDO) rm -f $(TWEAK_DIR)/$(DYLIB) $(TWEAK_DIR)/$(WHITELIST)

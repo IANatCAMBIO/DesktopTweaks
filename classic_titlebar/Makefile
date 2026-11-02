@@ -6,7 +6,7 @@ WHITELIST ?= $(OUT).whitelist
 INSTALL_DIR ?= /private/var/ammonia/core/tweaks
 SUDO ?= sudo
 
-.PHONY: all install clean
+.PHONY: all install install-whitelist clean
 
 all: $(OUT)
 
@@ -41,6 +41,15 @@ install: $(OUT)
 		echo "Installed default $(INSTALL_DIR)/$(WHITELIST)"; \
 	fi
 	@echo "installed; relaunch the whitelisted apps to pick it up"
+
+# `install` never overwrites a whitelist that is already in place, so that
+# whitelist edits made directly in the tweak directory survive a reinstall.
+# This target is the deliberate override: it replaces the installed whitelist
+# with this repo's copy.
+install-whitelist:
+	$(SUDO) install -o root -g wheel -m 644 $(WHITELIST) "$(INSTALL_DIR)/$(WHITELIST).new"
+	$(SUDO) mv -f "$(INSTALL_DIR)/$(WHITELIST).new" "$(INSTALL_DIR)/$(WHITELIST)"
+	@echo "whitelist replaced; relaunch the affected apps"
 
 clean:
 	rm -f $(OUT)
