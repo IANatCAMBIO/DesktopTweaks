@@ -20,9 +20,9 @@ all: $(TWEAKS)
 $(TWEAKS):
 	$(MAKE) -C $@
 
-# classic_titlebar writes into /private/var/ammonia/core/tweaks itself, so the
-# whole target needs root: use `sudo make install`. The other two invoke sudo
-# internally, which is harmless when it is already root.
+# Each subdirectory's install target invokes sudo itself, so this runs as
+# yourself and prompts once sudo's timestamp expires. Override with
+# `make install SUDO=` when already root.
 install:
 	@for d in $(TWEAKS); do $(MAKE) -C $$d install || exit 1; done
 

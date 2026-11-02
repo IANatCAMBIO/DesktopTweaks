@@ -4,6 +4,9 @@ OUT ?= ClassicTitlebar.dylib
 SRC ?= ClassicTitlebar.m
 WHITELIST ?= $(OUT).whitelist
 INSTALL_DIR ?= /private/var/ammonia/core/tweaks
+SUDO ?= sudo
+
+.PHONY: all install clean
 
 all: $(OUT)
 
@@ -28,19 +31,16 @@ $(OUT): $(SRC)
 # path and rename(2) into place so the install path gets a fresh inode —
 # the kernel then reads the signature from scratch.
 install: $(OUT)
-	@if [ -d "$(INSTALL_DIR)" ]; then \
-		echo "Using existing $(INSTALL_DIR)"; \
-	else \
-		mkdir -p $(INSTALL_DIR); \
-	fi
-	cp $(OUT) "$(INSTALL_DIR)/$(OUT).new"
-	mv -f "$(INSTALL_DIR)/$(OUT).new" "$(INSTALL_DIR)/$(OUT)"
+	$(SUDO) mkdir -p "$(INSTALL_DIR)"
+	$(SUDO) install -o root -g wheel -m 755 $(OUT) "$(INSTALL_DIR)/$(OUT).new"
+	$(SUDO) mv -f "$(INSTALL_DIR)/$(OUT).new" "$(INSTALL_DIR)/$(OUT)"
 	@if [ -f "$(INSTALL_DIR)/$(WHITELIST)" ]; then \
 		echo "Keeping existing $(INSTALL_DIR)/$(WHITELIST)"; \
 	else \
-		cp $(WHITELIST) $(INSTALL_DIR)/; \
+		$(SUDO) install -o root -g wheel -m 644 $(WHITELIST) "$(INSTALL_DIR)/$(WHITELIST)"; \
 		echo "Installed default $(INSTALL_DIR)/$(WHITELIST)"; \
 	fi
+	@echo "installed; relaunch the whitelisted apps to pick it up"
 
 clean:
 	rm -f $(OUT)

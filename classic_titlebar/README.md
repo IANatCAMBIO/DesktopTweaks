@@ -39,9 +39,9 @@ make install
 Or manually:
 
 ```sh
-mkdir -p /private/var/ammonia/core/tweaks
-cp ClassicTitlebar.dylib /private/var/ammonia/core/tweaks/
-cp ClassicTitlebar.dylib.whitelist /private/var/ammonia/core/tweaks/
+sudo mkdir -p /private/var/ammonia/core/tweaks
+sudo install -o root -g wheel -m 755 ClassicTitlebar.dylib /private/var/ammonia/core/tweaks/
+sudo install -o root -g wheel -m 644 ClassicTitlebar.dylib.whitelist /private/var/ammonia/core/tweaks/
 ```
 
 Then relaunch the whitelisted apps.

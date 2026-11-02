@@ -33,14 +33,14 @@ strip.
 ## Build and install
 
 ```sh
-make              # build all three tweaks as yourself
-sudo make install # install all three into /private/var/ammonia/core/tweaks
+make         # build all three tweaks
+make install # install all three into /private/var/ammonia/core/tweaks
 ```
 
-Build first as yourself and install second, so the build products are not left
-owned by root. `sudo` is needed for the whole `install` target because
-`classic_titlebar` writes into Ammonia's tweak directory directly; the other
-two invoke `sudo` themselves, which is harmless when it is already root.
+Run both as yourself. Ammonia's tweak directory is root-owned, so each tweak's
+`install` target invokes `sudo` itself and you are prompted once, rather than
+running the build as root and leaving root-owned build products behind. If you
+are already root, use `make install SUDO=` to skip the inner `sudo`.
 
 Then relaunch the affected apps — injection happens at process launch, so
 anything already running keeps whatever it was launched with. No reboot is
@@ -54,7 +54,7 @@ uninstall target yet, and the target says what to remove by hand).
 Each tweak can also be built and installed on its own:
 
 ```sh
-cd liquid_glass_off && make && make test && sudo make install
+cd liquid_glass_off && make && make test && make install
 ```
 
 ## Choosing which apps a tweak applies to
