@@ -3,7 +3,7 @@
 TWEAK      = firefox_titlebar
 DYLIB      = $(TWEAK).dylib
 WHITELIST  = $(DYLIB).whitelist
-TWEAK_DIR  = /private/var/ammonia/core/tweaks
+TWEAK_DIR ?= /private/var/ammonia/core/tweaks
 SUDO      ?= sudo
 CC         = clang
 CFLAGS     = -Wall -Wextra -O2

@@ -3,7 +3,7 @@ ARCHS ?= arm64 x86_64
 OUT ?= ClassicTitlebar.dylib
 SRC ?= ClassicTitlebar.m
 WHITELIST ?= $(OUT).whitelist
-INSTALL_DIR ?= /private/var/ammonia/core/tweaks
+TWEAK_DIR ?= /private/var/ammonia/core/tweaks
 SUDO ?= sudo
 
 .PHONY: all install install-whitelist clean
@@ -31,14 +31,14 @@ $(OUT): $(SRC)
 # path and rename(2) into place so the install path gets a fresh inode —
 # the kernel then reads the signature from scratch.
 install: $(OUT)
-	$(SUDO) mkdir -p "$(INSTALL_DIR)"
-	$(SUDO) install -o root -g wheel -m 755 $(OUT) "$(INSTALL_DIR)/$(OUT).new"
-	$(SUDO) mv -f "$(INSTALL_DIR)/$(OUT).new" "$(INSTALL_DIR)/$(OUT)"
-	@if [ -f "$(INSTALL_DIR)/$(WHITELIST)" ]; then \
-		echo "Keeping existing $(INSTALL_DIR)/$(WHITELIST)"; \
+	$(SUDO) mkdir -p "$(TWEAK_DIR)"
+	$(SUDO) install -o root -g wheel -m 755 $(OUT) "$(TWEAK_DIR)/$(OUT).new"
+	$(SUDO) mv -f "$(TWEAK_DIR)/$(OUT).new" "$(TWEAK_DIR)/$(OUT)"
+	@if [ -f "$(TWEAK_DIR)/$(WHITELIST)" ]; then \
+		echo "Keeping existing $(TWEAK_DIR)/$(WHITELIST)"; \
 	else \
-		$(SUDO) install -o root -g wheel -m 644 $(WHITELIST) "$(INSTALL_DIR)/$(WHITELIST)"; \
-		echo "Installed default $(INSTALL_DIR)/$(WHITELIST)"; \
+		$(SUDO) install -o root -g wheel -m 644 $(WHITELIST) "$(TWEAK_DIR)/$(WHITELIST)"; \
+		echo "Installed default $(TWEAK_DIR)/$(WHITELIST)"; \
 	fi
 	@echo "installed; relaunch the whitelisted apps to pick it up"
 
@@ -47,8 +47,8 @@ install: $(OUT)
 # This target is the deliberate override: it replaces the installed whitelist
 # with this repo's copy.
 install-whitelist:
-	$(SUDO) install -o root -g wheel -m 644 $(WHITELIST) "$(INSTALL_DIR)/$(WHITELIST).new"
-	$(SUDO) mv -f "$(INSTALL_DIR)/$(WHITELIST).new" "$(INSTALL_DIR)/$(WHITELIST)"
+	$(SUDO) install -o root -g wheel -m 644 $(WHITELIST) "$(TWEAK_DIR)/$(WHITELIST).new"
+	$(SUDO) mv -f "$(TWEAK_DIR)/$(WHITELIST).new" "$(TWEAK_DIR)/$(WHITELIST)"
 	@echo "whitelist replaced; relaunch the affected apps"
 
 clean:
